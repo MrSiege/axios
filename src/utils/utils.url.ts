@@ -14,7 +14,7 @@ import * as lambdasExtends from './lambdas.extends'
  */
 function buildURL(url: string, params: object): string {
   // 去掉 url 的 hash
-  let URL = url.split('/#/')[0]
+  let URL = url.split('/#/')[0].replace(/\/$/g, '');
 
   if (!params) {
     return URL
@@ -26,12 +26,8 @@ function buildURL(url: string, params: object): string {
    * 2. date
    * 3. 基本类型
    */
-  interface Isa {
-    (value: any): boolean
-  } // 判断类型
-  interface Transform {
-    (key: string, value: any): string
-  } // 转换数据
+  interface Isa { (value: any): boolean } // 判断类型
+  interface Transform { (key: string, value: any): string } // 转换数据
 
   // 拼接谓词函数与转换函数
   const transform = (is: Isa, action: Transform) => {
