@@ -61,4 +61,4 @@ function buildURL(url: string, params: object): string {
     .replace(/%26/g, '&')
 }
 
-export { buildURL }
+export default buildURL;

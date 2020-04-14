@@ -1,5 +1,3 @@
-import { request } from "http";
-
 type Method =
   | 'get'
   | 'GET'
@@ -23,6 +21,7 @@ interface AxiosRequestConfig {
   params?: any
   headers?: any
   responseType?: XMLHttpRequestResponseType
+  timeout?: number
 }
 
 interface AxiosResponse {
@@ -36,4 +35,12 @@ interface AxiosResponse {
 
 interface AxiosPromise extends Promise<AxiosResponse> {}
 
-export { Method, AxiosRequestConfig, AxiosResponse, AxiosPromise }
+interface AxiosException extends Error {
+  isAxiosException: boolean
+  config: AxiosRequestConfig
+  code?: string
+  request?: any
+  response?: AxiosResponse
+}
+
+export { Method, AxiosRequestConfig, AxiosResponse, AxiosPromise, AxiosException }

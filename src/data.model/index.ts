@@ -1,0 +1,1 @@
+export { default as AxiosException } from './axios.exception';

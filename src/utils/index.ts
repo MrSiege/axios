@@ -1,5 +1,5 @@
-export * from './utils.url'
 export * from './lambdas.extends'
+export { default as buildURL } from './utils.buildURL'
 export { default as compose } from './lambdas.compose'
 export { default as flow } from './lambdas.flow'
 export { default as formPairs } from './lambdas.formPairs'
