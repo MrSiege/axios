@@ -1,6 +1,6 @@
-import * as lambdas from 'lambdas'
-import * as utils from './utils'
-import { AxiosRequestConfig } from './types'
+import * as lambdas from 'lambdas';
+import * as utils from '../utils';
+import { AxiosRequestConfig } from '../types';
 
 /**
  * 转换 config 的 url
