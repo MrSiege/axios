@@ -1,6 +1,6 @@
 import * as lambdas from 'lambdas';
 import { default as Axios } from './axios';
-import { Axios as IAxios, AxiosInstance as IAxiosInstance,  AxiosRequestConfig, AxiosPromise,  } from '../types';
+import { AxiosInstance as IAxiosInstance,  AxiosRequestConfig, AxiosPromise } from '../types';
 
 const instance = new Axios();
 
@@ -15,6 +15,11 @@ function axios<T>(url: string, config?: AxiosRequestConfig): AxiosPromise<T> {
   return instance.get<T>(url, config);
 }
 
-const AxiosInstance: IAxiosInstance & IAxios = Object.assign(axios, instance) as IAxiosInstance & IAxios;
+// TODO: Object.assign 无法复制 Axios 原型上的属性
+const AxiosInstance: IAxiosInstance & Axios = Object.assign(axios, instance) as any;
+
+for(const key in instance) {
+  (AxiosInstance as any)[key] = (instance as any)[key];
+}
 
 export default AxiosInstance;

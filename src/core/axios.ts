@@ -1,14 +1,39 @@
+import * as lambdas from 'lambdas';
 import { default as dispatcher } from './dispatcher';
+import { default as DefaultConfig } from './default.config';
+import { default as InterceptorsManager } from './interceptors';
 import { Axios as IAxios,  AxiosRequestConfig, AxiosPromise } from '../types';
 
-class Axios implements IAxios {
+class Axios extends DefaultConfig implements IAxios {
+  // 拦截器管理容器
+  interceptors: InterceptorsManager;
+
+  constructor() {
+    super();
+    this.interceptors = new InterceptorsManager();
+  }
+
   /**
    * 执行 http request 请求
    * @param config 配置项
    * @return AxiosPromise
    */
   request<T=any>(config: AxiosRequestConfig): AxiosPromise<T>{
-    return dispatcher<T>(config);
+    const { interceptors } = this;
+    const { requestInterceptors, responseInterceptors } = interceptors;
+    const RConfig = this.SUMConfig(config);
+    const promiseChain: any[] = [ { resolve: () => dispatcher<T>(RConfig) } ];
+    requestInterceptors.map(v => promiseChain.unshift(v));
+    responseInterceptors.map(v => promiseChain.push(v));
+
+    const promise = lambdas.reduce(
+      promiseChain,
+      (promise: any, interceptor: any) => promise.then(interceptor.resolve, interceptor.reject),
+      Promise.resolve(RConfig),
+      undefined,
+    );
+
+    return promise;
   }
 
   /**
@@ -20,7 +45,7 @@ class Axios implements IAxios {
   get<T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>{
     const RConfig: AxiosRequestConfig  = { url, method: 'get' };
     if (config) Object.assign(RConfig, config);
-    return dispatcher<T>(RConfig);
+    return this.request<T>(RConfig);
   }
 
   /**
@@ -32,7 +57,7 @@ class Axios implements IAxios {
   delete<T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>{
     const RConfig: AxiosRequestConfig  = { url, method: 'delete' };
     if (config) Object.assign(RConfig, config);
-    return dispatcher<T>(RConfig);
+    return this.request<T>(RConfig);
   }
 
   /**
@@ -44,7 +69,7 @@ class Axios implements IAxios {
   head<T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>{
     const RConfig: AxiosRequestConfig  = { url, method: 'head' };
     if (config) Object.assign(RConfig, config);
-    return dispatcher<T>(RConfig);
+    return this.request<T>(RConfig);
   }
 
   /**
@@ -56,7 +81,7 @@ class Axios implements IAxios {
   options<T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>{
     const RConfig: AxiosRequestConfig  = { url, method: 'options' };
     if (config) Object.assign(RConfig, config);
-    return dispatcher<T>(RConfig);
+    return this.request<T>(RConfig);
   }
 
   /**
@@ -69,7 +94,7 @@ class Axios implements IAxios {
   post<T=any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>{
     const RConfig: AxiosRequestConfig  = { url, method: 'post', data };
     if (config) Object.assign(RConfig, config);
-    return dispatcher<T>(RConfig);
+    return this.request<T>(RConfig);
   }
 
   /**
@@ -82,7 +107,7 @@ class Axios implements IAxios {
   put<T=any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>{
     const RConfig: AxiosRequestConfig  = { url, method: 'put', data };
     if (config) Object.assign(RConfig, config);
-    return dispatcher<T>(RConfig);
+    return this.request<T>(RConfig);
   }
 
   /**
@@ -95,7 +120,7 @@ class Axios implements IAxios {
   patch<T=any>(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise<T>{
     const RConfig: AxiosRequestConfig  = { url, method: 'patch', data };
     if (config) Object.assign(RConfig, config);
-    return dispatcher<T>(RConfig);
+    return this.request<T>(RConfig);
   }
 }
 

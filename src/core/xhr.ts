@@ -1,4 +1,3 @@
-import * as lambdas from 'lambdas';
 import * as utils from '../utils';
 import * as exception from '../exception';
 import { AxiosRequestConfig, AxiosResponse, AxiosPromise } from '../types';

@@ -8,7 +8,7 @@ import { default as tail } from './lambdas.tail';
  * @param funs 函数列表
  * @return 复合后的函数
  */
-function flow<T>(...funs: any[]): (...args: any[]) => T {
+function flow<T=any>(...funs: any[]): (...args: any[]) => T {
   return (...args: any[]) => {
     const first = head(funs);
 
