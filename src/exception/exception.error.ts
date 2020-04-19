@@ -8,8 +8,8 @@ function listenError(
   request?: XMLHttpRequest,
   response?: AxiosResponse,
 ){
-  return () => rej(AxiosException.of(
-    'Network Error',
+  return (error: string = 'Network Error') => rej(AxiosException.of(
+    error,
     config,
     undefined,
     request,

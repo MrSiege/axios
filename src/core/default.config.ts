@@ -6,6 +6,7 @@ class DefaultConfig implements AxiosDefaultConfig {
     url: '',
     method: 'GET',
     timeout: 0,
+    withCredentials: false,
     headers: {
       common: {
         Accept: 'application/json, text/plain, */*',
@@ -31,9 +32,9 @@ class DefaultConfig implements AxiosDefaultConfig {
    */
   SUMConfig(config: AxiosRequestConfig): AxiosRequestConfig {
     const RConfig = lambdas.clonedeep(this.config);;
-    const { headers } = RConfig.headers;
+    const { headers } = RConfig;
     const method = (config.method || 'get').toLocaleLowerCase();
-
+    
     Object.assign(RConfig, config);
     Object.assign(RConfig.headers, headers.common);
     Object.assign(RConfig.headers, headers[method] || {})

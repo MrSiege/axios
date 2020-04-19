@@ -9,9 +9,10 @@ import { default as tail } from './lambdas.tail';
  * @return 复合后的函数
  */
 function flow<T=any>(...funs: any[]): (...args: any[]) => T {
+  if(funs.length === 0) return (...args: any[]) => args as any;
+
   return (...args: any[]) => {
     const first = head(funs);
-
     return lambdas.reduce(
       tail(funs),
       (result, fun) => fun(result), 

@@ -2,15 +2,18 @@ import * as lambdas from 'lambdas';
 import { default as dispatcher } from './dispatcher';
 import { default as DefaultConfig } from './default.config';
 import { default as InterceptorsManager } from './interceptors';
+import { CancelTokenManager } from '../cancel.token';
 import { Axios as IAxios,  AxiosRequestConfig, AxiosPromise } from '../types';
 
 class Axios extends DefaultConfig implements IAxios {
   // 拦截器管理容器
   interceptors: InterceptorsManager;
+  cancelTokens: CancelTokenManager;
 
   constructor() {
     super();
     this.interceptors = new InterceptorsManager();
+    this.cancelTokens = new CancelTokenManager();
   }
 
   /**

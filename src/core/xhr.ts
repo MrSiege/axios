@@ -10,12 +10,16 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
     responseType = 'text', 
     headers,
     timeout = 0,
+    cancelToken,
+    withCredentials = false,
   } = config;
 
   let res: any = () => null;
   let rej: any = () => null;
   const promise = new Promise<AxiosResponse>((r, e) => { res = r; rej = e});
   const XHR = new XMLHttpRequest();
+  const listenTimeout = exception.listenTimeout(res, rej, config, XHR, undefined, timeout);
+  const listenError = exception.listenError(res, rej, config, XHR, undefined);
 
   const callback = function () : any {
     if(XHR.readyState !== 4) return;
@@ -42,11 +46,27 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
     exception.listenResponse(res, rej, config, XHR, axiosResponse);
   };
 
-  XHR.responseType = responseType;
-  XHR.onreadystatechange = callback;
-  XHR.timeout = timeout;
-  XHR.ontimeout = exception.listenTimeout(res, rej, config, XHR, undefined, timeout);
-  XHR.onerror = exception.listenError(res, rej, config, XHR, undefined);
+  // 取消
+  if(cancelToken) {
+    // tslint:disable-next-line: no-floating-promises
+    cancelToken.promise.then((message: string) => { XHR.abort(); rej(message); });
+
+    // 已取消则不执行请求
+    if(cancelToken.isCanceled) {
+      listenError('CancelToken has expired.');
+      return promise;
+    };
+  }
+
+  Object.assign(XHR, {
+    responseType,
+    timeout,
+    withCredentials,
+    ontimeout: listenTimeout,
+    onerror: listenError,
+    onreadystatechange: callback,
+  });
+
   XHR.open(method.toUpperCase(), url, true);
   utils.pairs(headers).map(VK => XHR.setRequestHeader(VK[0], VK[1]));
   XHR.send(data);

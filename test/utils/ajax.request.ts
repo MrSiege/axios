@@ -1,8 +1,6 @@
-import { default as defer } from './defer';
-
-function ajaxRequest(): Promise<JasmineAjaxRequest> {
+function ajaxRequest(delay: number = 0): Promise<JasmineAjaxRequest> {
   return new Promise(
-    res => defer(() => res(jasmine.Ajax.requests.mostRecent()))
+    res => setTimeout(() => res(jasmine.Ajax.requests.mostRecent()), delay)
   )
 }
 
