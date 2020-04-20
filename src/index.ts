@@ -1,2 +1,2 @@
 export * from './types';
-export { Axios } from './core';
+export { axios } from './core';

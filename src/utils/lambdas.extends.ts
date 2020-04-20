@@ -1,7 +1,7 @@
 import * as lambdas from 'lambdas'
 
 /**
- * 接受一个方法，并在给定对象上调用它
+ * 接受一个方法，如果给定对象存在该方法则调用它
  * @param name 方法名
  * @param method 函数
  * @return invoker 函数
@@ -10,7 +10,8 @@ function invoker(name: string, method: any): (target: any, ...args: any[]) => an
   return (target: any, ...args: any[]) => {
     const targetMethod = target[name]
 
-    return targetMethod && method === targetMethod && targetMethod.apply(target, args)
+    if(targetMethod && method === targetMethod) return targetMethod.apply(target, args);
+    else return undefined;
   }
 }
 

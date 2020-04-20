@@ -6,7 +6,7 @@ import { default as flow } from './lambdas.flow';
  * @param funs 函数列表
  * @return 复合后的函数
  */
-function compose<T>(...funs: any[]): (...args: any[]) => T {
+function compose<T=any>(...funs: any[]): (...args: any[]) => T {
   return flow<T>(...reverse(funs));
 }
 

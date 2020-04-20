@@ -12,7 +12,7 @@ import * as lambdasExtends from './lambdas.extends'
  * @param params 参数数据包
  * @return 拼接编译参数后的字符串
  */
-function buildURL(url: string, params: object): string {
+function buildURL(url: string, params?: object): string {
   // 去掉 url 的 hash
   let URL = url.split('/#/')[0].replace(/\/$/g, '');
 

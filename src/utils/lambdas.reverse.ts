@@ -1,12 +1,12 @@
 /**
  * 反转列表的顺序
  * @param list 列表
- * @return 列表的第一个元素
+ * @return 反转后的列表
  */
 function reverse<T>(list: T[]): T[] {
   const result = [];
-  
-  for(let index = list.length - 1; index <=0 ; index--) {
+
+  for(let index = list.length - 1; index >=0 ; index--) {
     result.push(list[index]);
   }
 

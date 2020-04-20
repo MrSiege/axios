@@ -13,6 +13,7 @@ function flow<T=any>(...funs: any[]): (...args: any[]) => T {
 
   return (...args: any[]) => {
     const first = head(funs);
+
     return lambdas.reduce(
       tail(funs),
       (result, fun) => fun(result), 

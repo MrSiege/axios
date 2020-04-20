@@ -9,7 +9,7 @@ function pairs(target: object): any[] {
   return lambdas.zip(
     lambdas.keys(target),
     lambdas.values(target),
-  );
+  ).filter(v => v.length > 0);
 }
 
 export default pairs;

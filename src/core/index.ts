@@ -1,1 +1,3 @@
-export { default as Axios } from './axios.instance';
+import { default as createInstance } from './axios.instance';
+const axios = createInstance();
+export { axios }

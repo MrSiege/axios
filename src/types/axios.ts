@@ -10,6 +10,7 @@ interface AxiosDefaultConfig {
 interface Axios extends AxiosDefaultConfig {
   interceptors: AxiosInterceptors;
   cancelTokens: CancelTokenManager;
+  instance(config?: AxiosRequestConfig): AxiosInstance;
   request<T=any>(config: AxiosRequestConfig): AxiosPromise<T>;
   get<T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
   delete<T=any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;

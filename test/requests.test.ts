@@ -1,4 +1,4 @@
-import { Axios } from '../src';
+import { axios } from '../src';
 import * as utils from './utils';
 
 describe('requests', () => {
@@ -6,7 +6,7 @@ describe('requests', () => {
   afterEach(() => jasmine.Ajax.uninstall())
 
   test('test Axios(url)', () => {
-    Axios('/echo');
+    axios('/echo');
     
     return utils.ajaxRequest().then(request => {
       expect(request.url).toBe('/echo');
@@ -15,17 +15,29 @@ describe('requests', () => {
   })
 
   test('Test CancelToken Whether it takes effect', () => {
-    const token = Axios.cancelTokens.generate();
-
-    Axios({
+    const token = axios.cancelTokens.generate();
+    
+    axios({
       url: '/echo',
       cancelToken: token,
     });
 
     return utils.ajaxRequest().then(request => {
-      console.log(request);
       expect(request.url).toBe('/echo');
       expect(request.method).toBe('GET');
     })
-  })
+  });
+
+  test('Test whether the new instance is available', () => {
+    const axios1 = axios.instance();
+
+    axios1({
+      url: '/echo',
+    });
+
+    return utils.ajaxRequest().then(request => {
+      expect(request.url).toBe('/echo');
+      expect(request.method).toBe('GET');
+    })
+  });
 })

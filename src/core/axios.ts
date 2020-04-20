@@ -2,8 +2,9 @@ import * as lambdas from 'lambdas';
 import { default as dispatcher } from './dispatcher';
 import { default as DefaultConfig } from './default.config';
 import { default as InterceptorsManager } from './interceptors';
+import { default as createInstance } from './axios.instance';
 import { CancelTokenManager } from '../cancel.token';
-import { Axios as IAxios,  AxiosRequestConfig, AxiosPromise } from '../types';
+import { Axios as IAxios, AxiosInstance,  AxiosRequestConfig, AxiosPromise } from '../types';
 
 class Axios extends DefaultConfig implements IAxios {
   // 拦截器管理容器
@@ -14,6 +15,14 @@ class Axios extends DefaultConfig implements IAxios {
     super();
     this.interceptors = new InterceptorsManager();
     this.cancelTokens = new CancelTokenManager();
+  }
+
+  instance(config?: AxiosRequestConfig): AxiosInstance {
+    const axiosInstance = createInstance();
+    const headers = axiosInstance.config.headers;
+    if(config) Object.assign(headers, config.headers);
+    if(config) Object.assign(axiosInstance.config, config, { headers });
+    return axiosInstance;
   }
 
   /**
