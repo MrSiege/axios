@@ -5,14 +5,14 @@ function listenResponse(
   res: any, 
   rej: any,
   config: AxiosRequestConfig,
-  request?: XMLHttpRequest,
+  request: XMLHttpRequest,
   response?: AxiosResponse,
 ){
   return () => {
-    if(res.status >= 200 && res.status < 300) res(response);
+    if(request.status >= 200 && request.status < 300) res(response);
     
     rej(AxiosException.of(
-      `Request failed with status code ${res.status}`,
+      `Request failed with status code ${request.status}`,
       config,
       undefined,
       request,

@@ -9,7 +9,7 @@ import { AxiosRequestConfig } from '../types';
  */
 function transformURL(config: AxiosRequestConfig): AxiosRequestConfig {
   const { url, params } = config;
-  config.url = utils.buildURL(url, params);
+  config.url = utils.buildURL(url!, params);
   return config;
 }
 

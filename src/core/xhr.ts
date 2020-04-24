@@ -67,7 +67,7 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
     onreadystatechange: callback,
   });
 
-  XHR.open(method.toUpperCase(), url, true);
+  XHR.open(method.toUpperCase(), url!, true);
   utils.pairs(headers).map(VK => XHR.setRequestHeader(VK[0], VK[1]));
   XHR.send(data);
   return promise;

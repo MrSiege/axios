@@ -17,6 +17,11 @@ class Axios extends DefaultConfig implements IAxios {
     this.cancelTokens = new CancelTokenManager();
   }
 
+  /**
+   * 创建一个 AxiosInstance 实例，并且合并参数中的配置到默认配置中
+   * @param config 默认配置
+   * @return AxiosInstance 实例
+   */
   instance(config?: AxiosRequestConfig): AxiosInstance {
     const axiosInstance = createInstance();
     const headers = axiosInstance.config.headers;

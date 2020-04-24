@@ -34,11 +34,11 @@ class DefaultConfig implements AxiosDefaultConfig {
     const RConfig = lambdas.clonedeep(this.config);;
     const { headers } = RConfig;
     const method = (config.method || 'get').toLocaleLowerCase();
-    
+
+    RConfig.headers = {};
     Object.assign(RConfig, config);
     Object.assign(RConfig.headers, headers.common);
     Object.assign(RConfig.headers, headers[method] || {})
-
     return RConfig
   }
 }

@@ -21,7 +21,7 @@ interface TransformRequest { (data: any, headers?: any): any }
 interface TransformResponse { (data: any): any }
 
 interface AxiosRequestConfig {
-  url: string
+  url?: string
   method?: Method
   data?: any
   params?: any
