@@ -1,4 +1,5 @@
 import * as lambdas from 'lambdas';
+import * as utils from '../utils';
 import { default as dispatcher } from './dispatcher';
 import { default as DefaultConfig } from './default.config';
 import { default as InterceptorsManager } from './interceptors';
@@ -39,17 +40,19 @@ class Axios extends DefaultConfig implements IAxios {
     const { interceptors } = this;
     const { requestInterceptors, responseInterceptors } = interceptors;
     const RConfig = this.SUMConfig(config);
+    const { XSRFCookieName, XSRFHeaderName } = RConfig;
+
+    // 设置 xsrf
+    if (XSRFCookieName && XSRFHeaderName) RConfig.headers[XSRFHeaderName] = utils.cookieRead(XSRFCookieName);
+
+    const initValue = Promise.resolve(RConfig);
+    const iterate = (p: any, i: any) => p.then(i.resolve, i.reject);
+
     const promiseChain: any[] = [ { resolve: () => dispatcher<T>(RConfig) } ];
     requestInterceptors.map(v => promiseChain.unshift(v));
     responseInterceptors.map(v => promiseChain.push(v));
 
-    const promise = lambdas.reduce(
-      promiseChain,
-      (promise: any, interceptor: any) => promise.then(interceptor.resolve, interceptor.reject),
-      Promise.resolve(RConfig),
-      undefined,
-    );
-
+    const promise = lambdas.reduce(promiseChain, iterate, initValue, undefined);
     return promise;
   }
 

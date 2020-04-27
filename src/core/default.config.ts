@@ -1,5 +1,5 @@
 import * as lambdas from 'lambdas';
-import { AxiosRequestConfig, AxiosDefaultConfig, Method } from '../types';
+import { AxiosRequestConfig, AxiosDefaultConfig } from '../types';
 
 class DefaultConfig implements AxiosDefaultConfig {
   config: AxiosRequestConfig = {
@@ -7,6 +7,8 @@ class DefaultConfig implements AxiosDefaultConfig {
     method: 'GET',
     timeout: 0,
     withCredentials: false,
+    XSRFCookieName: 'XSRF-TOKEN',
+    XSRFHeaderName: 'X-XSRF-TOKEN',
     headers: {
       common: {
         Accept: 'application/json, text/plain, */*',

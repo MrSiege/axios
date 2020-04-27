@@ -30,10 +30,15 @@ interface AxiosRequestConfig {
   timeout?: number
   cancelToken?: CancelToken
   withCredentials?: boolean
+  XSRFCookieName?: string
+  XSRFHeaderName?: string
+  onUploaderProgress?: (e: ProgressEvent) => void
+  onDownloadProgress?: (e: ProgressEvent) => void
+  auth?: { username: string, password: string }
   transforms?: {
     request?: TransformRequest[],
     response?: TransformResponse[],
-  }
+  },
 }
 
 export { Method, AxiosRequestConfig, TransformRequest, TransformResponse }

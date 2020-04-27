@@ -2,28 +2,12 @@ import * as utils from '../utils';
 import * as exception from '../exception';
 import { AxiosRequestConfig, AxiosResponse, AxiosPromise } from '../types';
 
-function xhr(config: AxiosRequestConfig): AxiosPromise {
-  const { 
-    url, 
-    data, 
-    method = 'get', 
-    responseType = 'text', 
-    headers,
-    timeout = 0,
-    cancelToken,
-    withCredentials = false,
-  } = config;
-
-  let res: any = () => null;
-  let rej: any = () => null;
-  const promise = new Promise<AxiosResponse>((r, e) => { res = r; rej = e});
-  const XHR = new XMLHttpRequest();
-  const listenTimeout = exception.listenTimeout(res, rej, config, XHR, undefined, timeout);
-  const listenError = exception.listenError(res, rej, config, XHR, undefined);
-
-  const callback = function () : any {
+function callback(XHR: XMLHttpRequest, res: any, rej: any, config: AxiosRequestConfig): any {
+  return () => {
     if(XHR.readyState !== 4) return;
     if(XHR.status === 0) return;
+
+    const { responseType = 'text' } = config;
     const responseData = responseType === 'text' ? XHR.responseText : XHR.response;
 
     const headers = (
@@ -44,7 +28,29 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
     };
 
     exception.listenResponse(res, rej, config, XHR, axiosResponse);
-  };
+  }
+};
+
+function xhr(config: AxiosRequestConfig): AxiosPromise {
+  const { 
+    url, 
+    data, 
+    method = 'get', 
+    responseType = 'text', 
+    headers,
+    timeout = 0,
+    cancelToken,
+    withCredentials = false,
+    onUploaderProgress = () => null,
+    onDownloadProgress = () => null,
+  } = config;
+
+  let res: any = () => null;
+  let rej: any = () => null;
+  const promise = new Promise<AxiosResponse>((r, e) => { res = r; rej = e});
+  const XHR = new XMLHttpRequest();
+  const listenTimeout = exception.listenTimeout(res, rej, config, XHR, undefined, timeout);
+  const listenError = exception.listenError(res, rej, config, XHR, undefined);
 
   // 取消
   if(cancelToken) {
@@ -64,10 +70,13 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
     withCredentials,
     ontimeout: listenTimeout,
     onerror: listenError,
-    onreadystatechange: callback,
+    onreadystatechange: callback(XHR, res, rej, config),
   });
 
+  if(data instanceof FormData) delete headers['Content-Type'];
   XHR.open(method.toUpperCase(), url!, true);
+  XHR.onprogress = onDownloadProgress;
+  XHR.upload.onprogress = onUploaderProgress;
   utils.pairs(headers).map(VK => XHR.setRequestHeader(VK[0], VK[1]));
   XHR.send(data);
   return promise;

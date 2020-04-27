@@ -35,7 +35,7 @@ function transformData(config: AxiosRequestConfig): AxiosRequestConfig {
  * @return AxiosRequestConfig 配置
  */
 function transformHeaders(config: AxiosRequestConfig): AxiosRequestConfig {
-  const { headers = {}, data } = config;
+  const { headers = {}, data, auth } = config;
   headers['Content-Type'] = headers['Content-Type'] ? headers['Content-Type'] : headers['content-type'];
   delete headers['content-type'];
 
@@ -47,6 +47,11 @@ function transformHeaders(config: AxiosRequestConfig): AxiosRequestConfig {
   // 删除无效的 Content-Type
   if(!headers['Content-Type']){
     delete headers['Content-Type'];
+  }
+
+  if(auth) {
+    const up = `${auth.username}:${auth.password}`;
+    headers['Authorization'] = `Basic ${btoa(up)}`
   }
 
   config.headers = headers;
