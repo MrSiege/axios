@@ -21,11 +21,7 @@ function transformURL(config: AxiosRequestConfig): AxiosRequestConfig {
 function transformData(config: AxiosRequestConfig): AxiosRequestConfig {
   const { data } = config;
   config.data = lambdas.isObject(data) ? JSON.stringify(data) : data;
-
-  if(!config.data){
-    delete config.data;
-  }
-
+  if(!config.data) delete config.data;
   return config;
 }
 
@@ -45,9 +41,7 @@ function transformHeaders(config: AxiosRequestConfig): AxiosRequestConfig {
   }
 
   // 删除无效的 Content-Type
-  if(!headers['Content-Type']){
-    delete headers['Content-Type'];
-  }
+  if(!headers['Content-Type']) delete headers['Content-Type']
 
   if(auth) {
     const up = `${auth.username}:${auth.password}`;

@@ -1,14 +1,11 @@
 {
   "name": "axios",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "keywords": [],
-  "main": "dist/axios.umd.js",
-  "module": "dist/axios.es5.js",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
   "typings": "dist/types/axios.d.ts",
-  "files": [
-    "dist"
-  ],
   "author": "William Caulfield <18371143179@163.com>",
   "repository": {
     "type": "git",
