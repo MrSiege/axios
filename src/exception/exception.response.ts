@@ -5,10 +5,11 @@ function listenResponse(
   res: any, 
   rej: any,
   config: AxiosRequestConfig,
-  request: XMLHttpRequest,
-  response?: AxiosResponse,
+  request: any,
+  response: any,
 ){
   return () => {
+    console.log(response);
     if(request.status >= 200 && request.status < 300) res(response);
     
     rej(AxiosException.of(

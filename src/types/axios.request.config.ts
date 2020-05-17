@@ -1,4 +1,5 @@
 import { CancelToken } from './axios.cancel.token';
+import { default as AxiosAdapter } from './axios.adapter';
 
 type Method = (
   | 'get'
@@ -35,6 +36,7 @@ interface AxiosRequestConfig {
   onUploaderProgress?: (e: ProgressEvent) => void
   onDownloadProgress?: (e: ProgressEvent) => void
   auth?: { username: string, password: string }
+  adapter?: AxiosAdapter
   transforms?: {
     request?: TransformRequest[],
     response?: TransformResponse[],

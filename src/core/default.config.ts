@@ -1,4 +1,5 @@
 import * as lambdas from 'lambdas';
+import * as adapters from '../adapters';
 import { AxiosRequestConfig, AxiosDefaultConfig } from '../types';
 
 class DefaultConfig implements AxiosDefaultConfig {
@@ -9,6 +10,7 @@ class DefaultConfig implements AxiosDefaultConfig {
     withCredentials: false,
     XSRFCookieName: 'XSRF-TOKEN',
     XSRFHeaderName: 'X-XSRF-TOKEN',
+    adapter: adapters.xhr,
     headers: {
       common: {
         Accept: 'application/json, text/plain, */*',

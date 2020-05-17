@@ -5,7 +5,7 @@ function listenError(
   res: any, 
   rej: any,
   config: AxiosRequestConfig,
-  request?: XMLHttpRequest,
+  request?: any,
   response?: AxiosResponse,
 ){
   return (error: string = 'Network Error') => rej(AxiosException.of(

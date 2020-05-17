@@ -15,7 +15,7 @@ function callback(XHR: XMLHttpRequest, res: any, rej: any, config: AxiosRequestC
       .split('\r\n')
       .map(v => v.toLowerCase())
       .map(v => v.split(':'))
-      .map(VK => [VK[0].trim(), VK[1].trim()])
+      .map(([V, K]) => [V.trim(), K.trim()])
     );
 
     const axiosResponse: AxiosResponse = {
@@ -31,7 +31,7 @@ function callback(XHR: XMLHttpRequest, res: any, rej: any, config: AxiosRequestC
   }
 };
 
-function xhr(config: AxiosRequestConfig): AxiosPromise {
+function adapterXHR(config: AxiosRequestConfig): AxiosPromise {
   const { 
     url, 
     data, 
@@ -41,14 +41,14 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
     timeout = 0,
     cancelToken,
     withCredentials = false,
-    onUploaderProgress = () => null,
-    onDownloadProgress = () => null,
+    onUploaderProgress,
+    onDownloadProgress,
   } = config;
 
-  let res: any = () => null;
-  let rej: any = () => null;
-  const promise = new Promise<AxiosResponse>((r, e) => { res = r; rej = e});
+  // tslint:disable-next-line:one-variable-per-declaration
+  let res: any, rej: any;
   const XHR = new XMLHttpRequest();
+  const promise = new Promise<AxiosResponse>((r, e) => { res = r; rej = e});
   const listenTimeout = exception.listenTimeout(res, rej, config, XHR, undefined, timeout);
   const listenError = exception.listenError(res, rej, config, XHR, undefined);
 
@@ -75,11 +75,11 @@ function xhr(config: AxiosRequestConfig): AxiosPromise {
 
   if(data instanceof FormData) delete headers['Content-Type'];
   XHR.open(method.toUpperCase(), url!, true);
-  XHR.onprogress = onDownloadProgress;
-  XHR.upload.onprogress = onUploaderProgress;
+  if(onDownloadProgress) XHR.onprogress = onDownloadProgress;
+  if(onUploaderProgress) XHR.upload.onprogress = onUploaderProgress;
   utils.pairs(headers).map(VK => XHR.setRequestHeader(VK[0], VK[1]));
   XHR.send(data);
   return promise;
 }
 
-export default xhr;
+export default adapterXHR;

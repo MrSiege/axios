@@ -5,7 +5,7 @@ function listenTimeout(
   res: any, 
   rej: any,
   config: AxiosRequestConfig,
-  request?: XMLHttpRequest,
+  request?: any,
   response?: AxiosResponse,
   timeout?: number,
 ){
