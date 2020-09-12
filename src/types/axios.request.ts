@@ -43,4 +43,14 @@ interface AxiosRequestConfig {
   },
 }
 
-export { Method, AxiosRequestConfig, TransformRequest, TransformResponse }
+interface AxiosRequest {
+  config: AxiosRequestConfig,
+  url: string,
+  status: number,
+  remoteAddress: string,
+  method: Method,
+  headers: object,
+  body: object,
+}
+
+export { Method, AxiosRequest, AxiosRequestConfig, TransformRequest, TransformResponse }

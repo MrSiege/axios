@@ -1,8 +1,8 @@
-import { AxiosRequestConfig } from './axios.request.config';
+import { AxiosRequest } from './axios.request';
 import { AxiosPromise } from './axios.response';
 
 interface AxiosAdapter {
-  (config: AxiosRequestConfig): AxiosPromise
+  (config: AxiosRequest): AxiosPromise
 }
 
 export default AxiosAdapter;

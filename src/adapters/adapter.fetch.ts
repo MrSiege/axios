@@ -27,10 +27,27 @@ function adapterFetch(config: AxiosRequestConfig): AxiosPromise {
   // tslint:disable-next-line:one-variable-per-declaration
   let res: any, rej: any;
   const promise = new Promise<AxiosResponse>((r, e) => { res = r; rej = e});
-  
-  fetch(url!, options)
-  .then(r => exception.listenResponse(res, rej, config, undefined, r)())
-  .catch(e => console.log(e))
+
+  const success = (r: Response) => {
+    const response: AxiosResponse = {
+      data: r.body,
+      status: r.status,
+      statusText: r.statusText,
+      headers: r.headers,
+      request: config,
+      originalKernel: r,
+    }
+
+    exception.listenResponse(res, rej, config, response)();
+  }
+
+  const fail = (e: any) => {
+    console.log(e);
+    exception.listenError(res, rej, config, undefined)()
+  }
+
+  if(timeout > 0) setTimeout(exception.listenTimeout(res, rej, config, undefined), timeout);
+  fetch(url!, options).then(success).catch(fail);
 
   return promise;
 }

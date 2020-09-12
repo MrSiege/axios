@@ -1,12 +1,12 @@
-import { AxiosRequestConfig } from './axios.request.config';
+import { AxiosRequest } from './axios.request';
 
 interface AxiosResponse<T=any> {
   data: T
   status: number
   statusText: string
-  headers: any
-  config: AxiosRequestConfig
-  request: XMLHttpRequest
+  headers: object
+  request: AxiosRequest
+  originalKernel: any
 }
 
 interface AxiosPromise<T=any> extends Promise<AxiosResponse<T>> {}

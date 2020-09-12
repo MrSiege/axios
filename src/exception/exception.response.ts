@@ -1,20 +1,17 @@
 import { AxiosException } from '../data.model';
-import { AxiosRequestConfig, AxiosResponse } from '../types';
+import { AxiosRequest, AxiosResponse } from '../types';
 
 function listenResponse(
   res: any, 
   rej: any,
-  config: AxiosRequestConfig,
-  request: any,
-  response: any,
+  request: AxiosRequest,
+  response: AxiosResponse,
 ){
   return () => {
-    console.log(response);
-    if(request.status >= 200 && request.status < 300) res(response);
+    if(response.status >= 200 && response.status < 300) res(response);
     
     rej(AxiosException.of(
-      `Request failed with status code ${request.status}`,
-      config,
+      `Request failed with status code ${response.status}`,
       undefined,
       request,
       response,

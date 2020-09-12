@@ -1,8 +1,8 @@
 import * as utils from '../utils';
 import * as exception from '../exception';
-import { AxiosRequestConfig, AxiosResponse, AxiosPromise } from '../types';
+import { AxiosRequest, AxiosResponse, AxiosPromise } from '../types';
 
-function callback(XHR: XMLHttpRequest, res: any, rej: any, config: AxiosRequestConfig): any {
+function callback(XHR: XMLHttpRequest, res: any, rej: any, config: AxiosRequest): any {
   return () => {
     if(XHR.readyState !== 4) return;
     if(XHR.status === 0) return;
@@ -19,19 +19,19 @@ function callback(XHR: XMLHttpRequest, res: any, rej: any, config: AxiosRequestC
     );
 
     const axiosResponse: AxiosResponse = {
-      config,
-      request: XHR,
+      originalKernel: XHR,
+      request: config,
       data: responseData,
       status: XHR.status,
       statusText: XHR.statusText,
       headers: utils.formPairs(headers),
     };
 
-    exception.listenResponse(res, rej, config, XHR, axiosResponse);
+    exception.listenResponse(res, rej, config, axiosResponse);
   }
 };
 
-function adapterXHR(config: AxiosRequestConfig): AxiosPromise {
+function adapterXHR(config: AxiosRequest): AxiosPromise {
   const { 
     url, 
     data, 
@@ -49,8 +49,8 @@ function adapterXHR(config: AxiosRequestConfig): AxiosPromise {
   let res: any, rej: any;
   const XHR = new XMLHttpRequest();
   const promise = new Promise<AxiosResponse>((r, e) => { res = r; rej = e});
-  const listenTimeout = exception.listenTimeout(res, rej, config, XHR, undefined, timeout);
-  const listenError = exception.listenError(res, rej, config, XHR, undefined);
+  const listenTimeout = exception.listenTimeout(res, rej, config, undefined, timeout);
+  const listenError = exception.listenError(res, rej, config, undefined);
 
   // 取消
   if(cancelToken) {

@@ -8,8 +8,8 @@ describe('adapters', () => {
 
   test('adapters.fetch', async () => {
     fetchAxios('/echo', { method: 'post' });
-    const request = await utils.ajaxRequest();
-    console.log(request);
+    //const request = await utils.ajaxRequest();
+    //console.log(request);
     // expect(request.url).toBe('/echo');
     // expect(request.method).toBe('POST');
   })

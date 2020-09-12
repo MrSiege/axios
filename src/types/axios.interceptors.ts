@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from './axios.request.config';
+import { AxiosRequest } from './axios.request';
 import { AxiosResponse } from './axios.response';
 
 // 拦截器
@@ -24,7 +24,7 @@ interface AxiosInterceptors {
   destory(interceptorKey: string): void;
 }
 
-interface RequestInterceptorRES { (request: AxiosRequestConfig): void }
+interface RequestInterceptorRES { (request: AxiosRequest): void }
 interface RequestInterceptorREJ { (error: any): void }
 interface ResponseInterceptorRES { (response: AxiosResponse): void }
 interface ResponseInterceptorREJ { (error: any): void }

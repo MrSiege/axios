@@ -1,4 +1,4 @@
-import { AxiosRequestConfig } from './axios.request.config';
+import { AxiosRequestConfig } from './axios.request';
 import { AxiosInterceptors } from './axios.interceptors';
 import { AxiosPromise } from './axios.response';
 import { CancelTokenManager } from './axios.cancel.token';

@@ -1,22 +1,19 @@
-import { AxiosException as IAxiosException, AxiosRequestConfig, AxiosResponse } from '../types';
+import { AxiosException as IAxiosException, AxiosRequest, AxiosResponse } from '../types';
 
 class AxiosException extends Error implements IAxiosException {
   isAxiosException: boolean;
-  config: AxiosRequestConfig;
   code?: string;
-  request?: any;
+  request?: AxiosRequest;
   response?: AxiosResponse;
 
   constructor(
     message: string,
-    config: AxiosRequestConfig,
     code?: string,
     request?: any,
     response?: AxiosResponse,
   ){
     super(message);
     this.isAxiosException = true;
-    this.config = config;
     this.code = code;
     this.request = request;
     this.response = response;
@@ -25,14 +22,12 @@ class AxiosException extends Error implements IAxiosException {
 
   static of(
     message: string,
-    config: AxiosRequestConfig,
     code?: string,
-    request?: any,
+    request?: AxiosRequest,
     response?: AxiosResponse,
   ): AxiosException{
     return new AxiosException(
       message,
-      config,
       code,
       request,
       response,

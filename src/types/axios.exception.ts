@@ -1,11 +1,10 @@
-import { AxiosRequestConfig } from './axios.request.config';
+import { AxiosRequest } from './axios.request';
 import { AxiosResponse } from './axios.response';
 
 interface AxiosException extends Error {
   isAxiosException: boolean
-  config: AxiosRequestConfig
   code?: string
-  request?: any
+  request?: AxiosRequest
   response?: AxiosResponse
 }
 
